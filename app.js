@@ -19,6 +19,7 @@ app.use(bodyparser.text());
 app.use('/api', apiRoute);
 
 
+// Probandoel ssh xd
 mongoose.connect(
     process.env.DBConn,
     {
