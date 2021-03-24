@@ -52,17 +52,6 @@ async function signUp(req, res) {
         error: err,
       });
     });
-    // If user doesn't exist
-  } else {
-    await bcrypt
-      .hash(password, 10)
-      .then((hashedPassword) => {
-        console.log('hash successfully created, creating user');
-        // Create user
-        const user = new User({
-          email: email,
-          password: hashedPassword,
-        });
 
     // If user already exists
     if (users.length >= 1) {
