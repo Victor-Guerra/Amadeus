@@ -1,6 +1,7 @@
 router = require('express').Router();
 
 const requestController = require('./controller/requestController');
+const validator = require('./tools/validator');
 
 router.post('/message', requestController.test);
 
