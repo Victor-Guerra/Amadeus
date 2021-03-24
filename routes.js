@@ -9,4 +9,7 @@ router.post('/message', requestController.handleMessage);
 router.post('/signUp', requestController.signUp);
 router.post('/logIn', requestController.logIn);
 
+// User routes
+router.post('/signUp', requestController.signUp);
+
 module.exports = router;
