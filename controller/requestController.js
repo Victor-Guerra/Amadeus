@@ -149,7 +149,6 @@ async function signUp(req, res) {
   if (email && validateEmail(email)) {
     emailValidated = true;
   }
-
   // Validate password
   if (password && validatePassword(password)) {
     passwordValidated = true;
