@@ -1,5 +1,7 @@
 .env
-./node_modules
-./package-lock.json
 ./MNIST/
+node_modules
+package-lock.json
 
+# HTTP request testing
+*.rest
