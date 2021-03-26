@@ -224,6 +224,9 @@ async function signUp(req, res) {
   }
 }
 
+async function test(req, res) {
+}
+
 async function handleMessage(req, res) {
   const message = req.body.message;
   const wit_response = await client.message(message);
