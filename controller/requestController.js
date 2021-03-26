@@ -99,8 +99,6 @@ async function signUp(req, res) {
     });
   }
 }
-
-
 async function handleMessage(req, res) {
   const message = req.body.message;
   const wit_response = await client.message(message);
@@ -111,5 +109,5 @@ async function handleMessage(req, res) {
 module.exports = {
   handleTestMessage,
   signUp,
-  handleMessage
+  handleMessage,
 };
