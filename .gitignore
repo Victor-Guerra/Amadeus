@@ -2,5 +2,6 @@
 node_modules
 package-lock.json
 
-# HTTP request testing
+# Testing
 *.rest
+globalConfig.json
