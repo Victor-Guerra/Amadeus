@@ -3,17 +3,12 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 const { validateEmail, validatePassword } = require('../tools/validator');
+const responseManager = require('../manager/responseManager');
+require('dotenv/config');
 
-async function test(req, res) {
-  const client = new Wit({
-    accessToken: req.body.accessToken,
-    logger: new log.Logger(log.DEBUG),
-  });
-
-  const message = req.body.message;
-  const wit_response = client.message(message);
-  res.json(wit_response);
-}
+const client = new Wit({
+    accessToken: process.env.MY_TOKEN,
+});
 
 async function signUp(req, res) {
   // Get email and password from request body
@@ -90,9 +85,16 @@ async function signUp(req, res) {
       message: 'Invalid email or password, please retry',
     });
   }
+
+async function handleMessage(req, res) {
+    const message = req.body.message;
+    const wit_response = await client.message(message);
+    const bot_response = await responseManager.getResponse(wit_response);
+    res.json(bot_response);
 }
 
 module.exports = {
   test,
   signUp,
+  handleMessage
 };
