@@ -4,7 +4,8 @@ require('dotenv/config');
 const User = require('../models/user');
 const { validateEmail, validatePassword } = require('../tools/validator');
 const client = new Wit({
-  accessToken: process.env.MY_TOKEN,
+    accessToken: process.env.MY_TOKEN,
+    logger: new log.Logger(log.DEBUG)
 });
 
 async function test(req, res) {
@@ -95,6 +96,9 @@ async function signUp(req, res) {
       message: 'Invalid email or password, please retry',
     });
   }
+}
+
+async function test(req, res) {
 }
 
 async function handleMessage(req, res) {
