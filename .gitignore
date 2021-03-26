@@ -5,3 +5,4 @@ package-lock.json
 
 # HTTP request testing
 *.rest
+globalConfig.json
