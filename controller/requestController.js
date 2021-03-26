@@ -4,12 +4,10 @@ require('dotenv/config');
 
 const client = new Wit({
     accessToken: process.env.MY_TOKEN,
+    logger: new log.Logger(log.DEBUG)
 });
 
 async function test(req, res) {
-    const message = req.body.message;
-    const wit_response = client.message(message);
-    res.json(wit_response);
 }
 
 async function handleMessage(req, res) {
