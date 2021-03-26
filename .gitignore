@@ -1,5 +1,4 @@
 .env
-<<<<<<< HEAD
 ./MNIST/
 node_modules
 package-lock.json
