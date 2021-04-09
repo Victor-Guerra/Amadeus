@@ -12,5 +12,6 @@ router.post('/signUp', requestController.signUp);
 
 // User routes
 router.post('/signUp', requestController.signUp);
+router.post('/logIn', requestController.logIn);
 
 module.exports = router;
