@@ -156,8 +156,7 @@ async function handleMessage(req, res) {
 
 async function signUp(req, res) {
   // Get email and password from request body
-  let email = req.body.email;
-  let password = req.body.password;
+  const { email, password } = req.body;
 
   // Boolean to keep track of password and email validation
   let emailValidated = false;
@@ -230,6 +229,55 @@ async function signUp(req, res) {
     });
   }
 }
+
+async function logIn(req, res) {
+  // Get email and password from request body
+  const { email, password } = req.body;
+
+  const user = await User.find({ email: email }).catch(() => {
+    console.log('error while trying to get users');
+    console.log(err);
+    return res.status(500).json({
+      message: 'Could not check if the user already exists.',
+      error: err,
+    });
+  });
+
+  // If user does not exist
+  if (user.length < 1) {
+    console.log('no user with that email was found');
+    return res.status(409).json({
+      message: 'No user with that email was found.',
+    });
+  }
+
+  // If user does exist
+  bcrypt.compare(password, user[0].password, (err, result) => {
+    if (err) {
+      console.log('error while authenticating');
+      console.log(err);
+      return res.status(409).json({
+        message: 'Could not authenticate the user.',
+        error: err,
+      });
+    }
+
+    // If the authentication passed
+    if (result) {
+      return res.status(200).json({
+        message: 'Successfully logged in.',
+      });
+    }
+
+    // If the authentication did not pass
+    return res.status(409).json({
+      message: 'Could not log in the user, wrong password.',
+    });
+  });
+}
+
+async function test(req, res) {}
+
 async function handleMessage(req, res) {
   const message = req.body.message;
   const wit_response = await client.message(message);
