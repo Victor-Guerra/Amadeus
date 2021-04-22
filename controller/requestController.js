@@ -7,6 +7,7 @@ const botParser = require('../bot/parser');
 require('dotenv/config');
 const User = require('../models/user');
 const { validateEmail, validatePassword } = require('../tools/validator');
+
 const client = new Wit({
   accessToken: process.env.MY_TOKEN,
   logger: new log.Logger(log.DEBUG),
@@ -222,16 +223,6 @@ async function signUp(req, res) {
       message: 'Invalid email or password, please retry',
     });
   }
-}
-
-async function test(req, res) {
-}
-
-async function handleMessage(req, res) {
-  const message = req.body.message;
-  const wit_response = await client.message(message);
-  const bot_response = await responseManager.getResponse(wit_response);
-  res.json(bot_response);
 }
 
 module.exports = {
