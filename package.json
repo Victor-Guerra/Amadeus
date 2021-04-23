@@ -4,7 +4,7 @@
   "description": "Mobile Apps Development Projects project.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "test": "jest"
   },
   "author": "",
