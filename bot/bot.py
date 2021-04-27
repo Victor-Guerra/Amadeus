@@ -7,6 +7,7 @@ from torchvision import transforms, datasets
 import torch.optim as opt
 import customDatasets
 
+EPOCHS = 3;
 
 class yesNoNet(nn.Module):
     def __init__(self):
