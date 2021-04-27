@@ -67,6 +67,8 @@ async function parseInput(wit_response) {
 
         const value = traits[key][0]["value"];
         const index = dicts.Dictionaries.traitsDict[key];
+        trait_values[index] = value / 5;
+
     }
 
     const output = [intent_value];
@@ -116,7 +118,6 @@ async function parseInput(wit_response) {
     while(output.length < 41) {
         output.push(0);
     }
-    console.log(output);
     return output;
 }
 
