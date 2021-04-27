@@ -231,6 +231,21 @@ async function signUp(req, res) {
   }
 }
 
+async function handleTestMessage(req, res) {
+  const message = req.body.message;
+  const wit_response = await client.message(message);
+  const bot_response = await botParser.parseInput(wit_response);
+  res.json(bot_response);
+
+}
+
+async function handleMessage(req, res) {
+  const message = req.body.message;
+  const wit_response = await client.message(message);
+  const bot_response = await responseManager.getResponse(wit_response);
+  res.json(bot_response);
+}
+
 module.exports = {
   signUp,
   logIn,

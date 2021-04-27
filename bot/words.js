@@ -6035,6 +6035,7 @@ class wordlist {
      "mexico":  6034,
      "ham":  6035,
      "dreamed":  6036,
+<<<<<<< HEAD
      "elbow": 6037,
      "roses": 6038,
      "chocolate": 6039,
@@ -6044,6 +6045,8 @@ class wordlist {
      "violins": 6043,
      "tomato": 6044,
      "pee": 6045,
+=======
+>>>>>>> 4db7999 (AM-15 Data input parser for Neural Network functions)
     }
 }
 
