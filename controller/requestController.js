@@ -1,20 +1,19 @@
 const { Wit, log } = require('node-wit');
 const bcrypt = require('bcrypt');
 
-const User = require('../models/user');
+const { findUserByEmail, saveUser } = require('../dao/userDao');
 const { validateEmail, validatePassword } = require('../tools/validator');
 const responseManager = require('../manager/responseManager');
 require('dotenv/config');
 
 const client = new Wit({
-    accessToken: process.env.MY_TOKEN,
-    logger: new log.Logger(log.DEBUG)
+  accessToken: process.env.MY_TOKEN,
+  logger: new log.Logger(log.DEBUG),
 });
 
 async function signUp(req, res) {
   // Get email and password from request body
-  let email = req.body.email;
-  let password = req.body.password;
+  const { email, password } = req.body;
 
   // Boolean to keep track of password and email validation
   let emailValidated = false;
@@ -31,9 +30,7 @@ async function signUp(req, res) {
   }
 
   if (passwordValidated && emailValidated) {
-    const users = await User.find({ email: email }).catch((err) => {
-      console.log('error while trying to get users');
-      console.log(err);
+    const users = await findUserByEmail(email).catch((err) => {
       return res.status(500).json({
         message: 'Could not check if the user already exists.',
         error: err,
@@ -52,13 +49,7 @@ async function signUp(req, res) {
         .then((hashedPassword) => {
           console.log('hash successfully created, creating user');
           // Create user
-          const user = new User({
-            email: email,
-            password: hashedPassword,
-          });
-
-          user
-            .save()
+          saveUser(email, hashedPassword)
             .then((result) => {
               console.log(result);
               res.status(201).json({
@@ -88,8 +79,52 @@ async function signUp(req, res) {
   }
 }
 
-async function test(req, res) {
+async function logIn(req, res) {
+  // Get email and password from request body
+  const { email, password } = req.body;
+
+  const user = await findUserByEmail(email).catch((err) => {
+    return res.status(500).json({
+      message: 'Could not check if the user already exists.',
+      error: err,
+    });
+  });
+  console.log('user', user);
+
+  // If user does not exist
+  if (user.length < 1) {
+    console.log('no user with that email was found');
+    return res.status(409).json({
+      message: 'No user with that email was found.',
+    });
+  }
+
+  // If user does exist
+  bcrypt.compare(password, user[0].password, (err, result) => {
+    if (err) {
+      console.log('error while authenticating');
+      console.log(err);
+      return res.status(409).json({
+        message: 'Could not authenticate the user.',
+        error: err,
+      });
+    }
+
+    // If the authentication passed
+    if (result) {
+      return res.status(200).json({
+        message: 'Successfully logged in.',
+      });
+    }
+
+    // If the authentication did not pass
+    return res.status(409).json({
+      message: 'Could not log in the user, wrong password.',
+    });
+  });
 }
+
+async function test(req, res) {}
 
 async function handleMessage(req, res) {
   const message = req.body.message;
@@ -101,5 +136,6 @@ async function handleMessage(req, res) {
 module.exports = {
   test,
   signUp,
+  logIn,
   handleMessage,
 };
