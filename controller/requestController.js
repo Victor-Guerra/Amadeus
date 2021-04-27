@@ -173,9 +173,7 @@ async function signUp(req, res) {
   }
 
   if (passwordValidated && emailValidated) {
-    const users = await User.find({ email: email }).catch((err) => {
-      console.log('error while trying to get users');
-      console.log(err);
+    const users = await findUserByEmail(email).catch((err) => {
       return res.status(500).json({
         message: 'Could not check if the user already exists.',
         error: err,
@@ -194,13 +192,7 @@ async function signUp(req, res) {
         .then((hashedPassword) => {
           console.log('hash successfully created, creating user');
           // Create user
-          const user = new User({
-            email: email,
-            password: hashedPassword,
-          });
-
-          user
-            .save()
+          saveUser(email, hashedPassword)
             .then((result) => {
               console.log(result);
               res.status(201).json({
@@ -234,14 +226,13 @@ async function logIn(req, res) {
   // Get email and password from request body
   const { email, password } = req.body;
 
-  const user = await User.find({ email: email }).catch(() => {
-    console.log('error while trying to get users');
-    console.log(err);
+  const user = await findUserByEmail(email).catch((err) => {
     return res.status(500).json({
       message: 'Could not check if the user already exists.',
       error: err,
     });
   });
+  console.log('user', user);
 
   // If user does not exist
   if (user.length < 1) {
