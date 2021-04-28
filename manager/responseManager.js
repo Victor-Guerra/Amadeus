@@ -1,6 +1,8 @@
 require('dotenv/config'); 
+const bip = require('../bot/parser');
 
 async function getResponse(wit_response) {
+    const bot_input = bip.parseInput(wit_response);
     const bot_response = processData(wit_response);
     return bot_response;
 }
@@ -15,6 +17,23 @@ function processData(wit_response){
      */
     const bot_response = 'Thanks ^^';
     return bot_response
+}
+
+async function getBotResponse(eval_string) {
+    const python = spawn('python3', ['../bot/evalYesNoBot.py', eval_string]);
+    var bot_response;
+    python.stdout.on('data', function (data) {
+        bot_response = data.toString();
+    });
+
+    python.on('close', (code) {
+        return bot_response;
+    });
+}
+
+function saveBotResponse(bot_input) {
+    const fs = require('fs');
+
 }
 
 
