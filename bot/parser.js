@@ -77,13 +77,8 @@ async function parseInput(wit_response) {
         
         const body = getBodyIndex(entity["body"]);
         const position = entity["start"] / text.length;
-        // "0.x1x2yz1"
-        // x1 = entity name
-        // x2 = entity role
-        // y  = objective entity (user/bot) optional 
-        // z  = structural entity optional
-        var entities_string = "";
 
+        var entities_string = "";
         const name = entity["name"];
         const role = entity["role"];
 
