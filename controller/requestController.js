@@ -32,7 +32,7 @@ async function signUp(req, res) {
 
   // Validate name
   if (name) {
-    nameValidated = true
+    nameValidated = true;
   }
 
   if (passwordValidated && emailValidated && nameValidated) {
@@ -80,7 +80,7 @@ async function signUp(req, res) {
     }
   } else {
     return res.status(409).json({
-      message: 'Invalid email or password, please retry',
+      message: 'Invalid credentials, please retry',
     });
   }
 }
@@ -101,7 +101,7 @@ async function logIn(req, res) {
   if (user.length < 1) {
     console.log('no user with that email was found');
     return res.status(409).json({
-      message: 'No user with that email was found.',
+      message: 'Could not log in the user, check your credentials.',
     });
   }
 
@@ -125,7 +125,7 @@ async function logIn(req, res) {
 
     // If the authentication did not pass
     return res.status(409).json({
-      message: 'Could not log in the user, wrong password.',
+      message: 'Could not log in the user, check your credentials.',
     });
   });
 }
