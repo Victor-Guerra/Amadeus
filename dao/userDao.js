@@ -12,9 +12,10 @@ async function findUserByEmail(email) {
   });
 }
 
-async function saveUser(email, password) {
+async function saveUser(name, email, password) {
   return new Promise((resolve, reject) => {
     const user = new User({
+      name: name,
       email: email,
       password: password,
     });
