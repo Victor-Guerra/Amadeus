@@ -30,9 +30,13 @@ userDao.saveUser = jest.fn((email, password) => {
 });
 
 describe('Given a POST request to /api/signUp', () => {
-  it('when providing a valid email & password, and no user exists with that email, then user should be signed up', async (done) => {
+  it('when providing a valid name, email & password, and no user exists with that email, then user should be signed up', async (done) => {
     // Set up mock db collection
-    const mockUser = { email: 'user@email.com', password: 'Qwerty123' };
+    const mockUser = {
+      name: 'name',
+      email: 'user@email.com',
+      password: 'Qwerty123',
+    };
 
     request(app)
       .post('/api/signUp')
@@ -49,8 +53,12 @@ describe('Given a POST request to /api/signUp', () => {
     done();
   });
 
-  it('when providing invalid email & password, then error message "Invalid email or password" is sent', async (done) => {
-    const mockUser = { email: 'invalid email', password: 'invalid password' };
+  it('when providing invalid name, email & password, then error message "Invalid credentials, please retry" is sent', async (done) => {
+    const mockUser = {
+      name: '',
+      email: 'invalid email',
+      password: 'invalid password',
+    };
 
     request(app)
       .post('/api/signUp')
@@ -60,7 +68,7 @@ describe('Given a POST request to /api/signUp', () => {
         const message = res.body.message;
         const status = res.status;
         expect(status).toBe(409);
-        expect(message).toBe('Invalid email or password, please retry');
+        expect(message).toBe('Invalid credentials, please retry');
         return done();
       });
 
@@ -68,7 +76,11 @@ describe('Given a POST request to /api/signUp', () => {
   });
 
   it('when providing valid email & password, and user exists with that email, then error message "A user registered with that email already exists" is sent', async (done) => {
-    const mockUser = { email: 'user@email.com', password: 'Qwerty123' };
+    const mockUser = {
+      name: 'name',
+      email: 'user@email.com',
+      password: 'Qwerty123',
+    };
 
     // First create a new user
     request(app).post('/api/signUp').send(mockUser).expect(201);
