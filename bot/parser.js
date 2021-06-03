@@ -52,7 +52,6 @@ async function parseInput(wit_response) {
     const traits = wit_response["traits"];
     const text = wit_response["text"];
  
-<<<<<<< HEAD
     var intent_name = "";
     if (intent[0] != undefined) {
         intent_name = intent[0]["name"];
@@ -61,10 +60,6 @@ async function parseInput(wit_response) {
     if(intent_name != "") {
         intent_value = dicts.Dictionaries.intentsDict[intent_name] / 5;
     }
-=======
-    const intent_name = intent[0]["name"];
-    const intent_value = dicts.Dictionaries.intentsDict[intent_name] / 5;
->>>>>>> 248ce9b (AM-15 Data input parser for Neural Network functions)
 
     var trait_values = [0,0,0,0,0,0,0];
     for(var i = 0; i < Object.keys(traits).length; i++) {
@@ -72,7 +67,6 @@ async function parseInput(wit_response) {
 
         const value = traits[key][0]["value"];
         const index = dicts.Dictionaries.traitsDict[key];
-<<<<<<< HEAD
         trait_values[index] = value / 5;
 
     }
@@ -80,26 +74,12 @@ async function parseInput(wit_response) {
     var i = 0;
     for(var i = 0; i < trait_values.length; i++) {
         output.push(Number(trait_values[i]));
-=======
-        trait_values[index] = value / 7;
-    }
-    const output = [intent_value];
-    for(element in trait_values) {
-        output.push(Number(element));
->>>>>>> 248ce9b (AM-15 Data input parser for Neural Network functions)
     }
 
-
-
-<<<<<<< HEAD
-=======
-    var entities_values = []
->>>>>>> 248ce9b (AM-15 Data input parser for Neural Network functions)
     for(var i = 0; i < Object.keys(entities).length; i++) {
         var key = Object.keys(entities)[i];
         const entity = entities[key][0];
         
-<<<<<<< HEAD
         var body = getBodyIndex(entity["body"]);
         if (body == undefined) {
             body = 0;
@@ -107,17 +87,6 @@ async function parseInput(wit_response) {
         const position = entity["start"] / text.length;
 
         var entities_string = "";
-=======
-        const body = getBodyIndex(entity["body"]);
-        const position = entity["start"] / text.length;
-        // "0.x1x2yz1"
-        // x1 = entity name
-        // x2 = entity role
-        // y  = objective entity (user/bot) optional 
-        // z  = structural entity optional
-        var entities_string = "";
-
->>>>>>> 248ce9b (AM-15 Data input parser for Neural Network functions)
         const name = entity["name"];
         const role = entity["role"];
 
@@ -142,12 +111,9 @@ async function parseInput(wit_response) {
         output.push(position);
         output.push(Number(entities_string));
     }
-<<<<<<< HEAD
     while(output.length < 40) {
         output.push(0);
     }
-=======
->>>>>>> 248ce9b (AM-15 Data input parser for Neural Network functions)
     console.log(output);
     return output;
 }
