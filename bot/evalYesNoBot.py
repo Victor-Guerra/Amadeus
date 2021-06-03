@@ -18,6 +18,9 @@ if __name__ == "__main__":
     net = bot.yesNoNet()
     net.load_state_dict(torch.load('./amadeus_yesno_weights.pth'))
     net.eval()
+    x = eval_string.split(',')
+    x = [float(dato) for dato in x]
+    x_t = torch.Tensor(x)
 
-    output = net(eval_string)
+    output = net(x_t)
     print(output)

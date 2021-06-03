@@ -14,7 +14,7 @@ class yesNoNet(nn.Module):
         # ==> Input Layer
         # --> 1 for Intent, 6 for Trait values, 33 (3 * 11) for 11 maximum words with word number,
         # -   word position, and entities.
-        self.fc1 = nn.Linear(40, 16)
+        self.fc1 = nn.Linear(41, 16)
         # ==> Hidden Layer 1
         self.fc2 = nn.Linear(16, 16)
         # ==> Hidden Layer 2
@@ -27,7 +27,7 @@ class yesNoNet(nn.Module):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
-        x = self.fc4(x)
+        x = F.relu(self.fc4(x))
         
-        return F.log_softmax(x, dim=1)
+        return F.softmax(x)
 
