@@ -31,3 +31,7 @@ class yesNoNet(nn.Module):
         x = F.relu(self.fc4(x))
         
         return F.softmax(x)
+<<<<<<< HEAD
+=======
+
+>>>>>>> e1c0650 (AM-15 Bot working and trainable, does not yet send response)
