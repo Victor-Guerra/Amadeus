@@ -15,11 +15,21 @@ class AmadeusDataSet(Dataset):
 
     def __getitem__(self, idx):
         file_path = os.path.join(self.dir, self.labels.iloc[idx, 0])
-        file = read_file(file_path)
-        label = self.labels.iloc[idx, 1]
+        file = open(file_path)
+        array = file.read() 
+        file.close()
+
+        array = array.split(',')
+        array = [float(dato) for dato in array]
+        array_t = torch.Tensor(array)
+
+        label = self.labels.iloc[idx, 1][2:] + ',' + self.labels.iloc[idx, 2]
+        label = label.strip('][').split(',')
+        label_t = torch.Tensor([int(num) for num in label])
+
         if self.transform:
             file = self.transform(file)
         if self.target_transform:
             label = self.target_transform(label)
-        sample = {"file": file, "label": label}
-        return sample
+
+        return array_t, label_t

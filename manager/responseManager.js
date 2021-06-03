@@ -26,7 +26,7 @@ async function getBotResponse(eval_string) {
         bot_response = data.toString();
     });
 
-    python.on('close', (code) {
+    python.on('close', (code) => {
         return bot_response;
     });
 }

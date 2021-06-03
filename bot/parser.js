@@ -52,8 +52,14 @@ async function parseInput(wit_response) {
     const traits = wit_response["traits"];
     const text = wit_response["text"];
  
-    const intent_name = intent[0]["name"];
-    const intent_value = dicts.Dictionaries.intentsDict[intent_name] / 5;
+    var intent_name = "";
+    if (intent[0] != undefined) {
+        intent_name = intent[0]["name"];
+    }
+    var intent_value = 2;
+    if(intent_name != "") {
+        intent_value = dicts.Dictionaries.intentsDict[intent_name] / 5;
+    }
 
     var trait_values = [0,0,0,0,0,0,0];
     for(var i = 0; i < Object.keys(traits).length; i++) {
@@ -61,21 +67,25 @@ async function parseInput(wit_response) {
 
         const value = traits[key][0]["value"];
         const index = dicts.Dictionaries.traitsDict[key];
-        trait_values[index] = value / 7;
+        trait_values[index] = value / 5;
+
     }
     const output = [intent_value];
-    for(element in trait_values) {
-        output.push(Number(element));
+    var i = 0;
+    for(var i = 0; i < trait_values.length; i++) {
+        output.push(Number(trait_values[i]));
     }
 
 
 
-    var entities_values = []
     for(var i = 0; i < Object.keys(entities).length; i++) {
         var key = Object.keys(entities)[i];
         const entity = entities[key][0];
         
-        const body = getBodyIndex(entity["body"]);
+        var body = getBodyIndex(entity["body"]);
+        if (body == undefined) {
+            body = 0;
+        }
         const position = entity["start"] / text.length;
 
         var entities_string = "";
@@ -102,6 +112,9 @@ async function parseInput(wit_response) {
         output.push(body);
         output.push(position);
         output.push(Number(entities_string));
+    }
+    while(output.length < 40) {
+        output.push(0);
     }
     console.log(output);
     return output;

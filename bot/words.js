@@ -6035,6 +6035,14 @@ class wordlist {
      "mexico":  6034,
      "ham":  6035,
      "dreamed":  6036,
+     "elbow": 6037,
+     "roses": 6038,
+     "chocolate": 6039,
+     "computers": 6040,
+     "backpack": 6041,
+     "vegetables": 6042,
+     "violins": 6043,
+     "tomato": 6044,
     }
 }
 
