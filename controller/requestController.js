@@ -16,11 +16,12 @@ const client = new Wit({
 
 async function signUp(req, res) {
   // Get email and password from request body
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
   // Boolean to keep track of password and email validation
   let emailValidated = false;
   let passwordValidated = false;
+  let nameValidated = false;
 
   // Validate email
   if (email && validateEmail(email)) {
@@ -32,7 +33,12 @@ async function signUp(req, res) {
     passwordValidated = true;
   }
 
-  if (passwordValidated && emailValidated) {
+  // Validate name
+  if (name) {
+    nameValidated = true;
+  }
+
+  if (passwordValidated && emailValidated && nameValidated) {
     const users = await findUserByEmail(email).catch((err) => {
       return res.status(500).json({
         message: 'Could not check if the user already exists.',
@@ -52,7 +58,7 @@ async function signUp(req, res) {
         .then((hashedPassword) => {
           console.log('hash successfully created, creating user');
           // Create user
-          saveUser(email, hashedPassword)
+          saveUser(name, email, hashedPassword)
             .then((result) => {
               console.log(result);
               res.status(201).json({
@@ -77,7 +83,7 @@ async function signUp(req, res) {
     }
   } else {
     return res.status(409).json({
-      message: 'Invalid email or password, please retry',
+      message: 'Invalid credentials, please retry',
     });
   }
 }
@@ -98,7 +104,7 @@ async function logIn(req, res) {
   if (user.length < 1) {
     console.log('no user with that email was found');
     return res.status(409).json({
-      message: 'No user with that email was found.',
+      message: 'Could not log in the user, check your credentials.',
     });
   }
 
@@ -122,7 +128,7 @@ async function logIn(req, res) {
 
     // If the authentication did not pass
     return res.status(409).json({
-      message: 'Could not log in the user, wrong password.',
+      message: 'Could not log in the user, check your credentials.',
     });
   });
 }
