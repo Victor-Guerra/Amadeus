@@ -2,7 +2,6 @@ const { Wit, log } = require('node-wit');
 const bcrypt = require('bcrypt');
 
 const { findUserByEmail, saveUser } = require('../dao/userDao');
-const { validateEmail, validatePassword } = require('../tools/validator');
 const responseManager = require('../manager/responseManager');
 const botParser = require('../bot/parser');
 require('dotenv/config');
