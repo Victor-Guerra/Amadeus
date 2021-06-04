@@ -8,25 +8,29 @@ import torch.optim as opt
 import customDatasets
 import bot
 
-EPOCHS = 3;
-BATCH_SIZE = 10;
+EPOCHS = 4
+BATCH_SIZE = 5
 
 if __name__ == "__main__":
-    if len(sys.argv) == 5:
-        script_name, testing_labels, testing_folder, training_labels, training_folder= sys.argv
+    if len(sys.argv) == 3:
+        script_name, training_labels, training_folder= sys.argv
     else:
         print("python3 bot.py <testing_labels> <testing_files_directory> <training_labels_file> <training_files_directory>")
         exit()
 
 
-    train_dataset = customDatasets.AmadeusDataSet(training_labels, training_folder, transform = transforms.Compose([transforms.ToTensor()]))
-    test_dataset = customDatasets.AmadeusDataSet.(testing_labels, testing_folder, transform = transforms.Compose([transforms.ToTensor()]))
+    train_dataset = customDatasets.AmadeusDataSet(training_labels, training_folder) #transforms.Compose([transforms.ToTensor()]))
+    #test_dataset = customDatasets.AmadeusDataSet(testing_labels, testing_folder, transform = transforms.Compose([transforms.ToTensor()]))
 
     trainset = torch.utils.data.DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-    testset = torch.utils.data.DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    #testset = torch.utils.data.DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
     net = bot.yesNoNet()
+    net.load_state_dict(torch.load('amadeus_yesno_weights.pth'))
+    net.eval()
+    #net = torch.load('amadeus_yesno_weights.pth')
     optimizer =  opt.Adam(net.parameters(), lr=0.001,)
+    criterion = nn.BCEWithLogitsLoss()
 
     for epoch in range(EPOCHS):
         for data in trainset:
@@ -35,10 +39,14 @@ if __name__ == "__main__":
 
             # maybe modify how the data is passed to the model
             output = net(x)
-            loss = F.nll_loss(output, y)
-            
+            print(output)
+            loss = criterion(output, y)
+            #loss = F.nll_loss(output[0], y)
+            print(loss)
+
+            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
         print(loss)
 
-    torch.save(net, 'amadeus_yesno_weights.pth');
+    torch.save(net.state_dict(), 'amadeus_yesno_weights.pth')

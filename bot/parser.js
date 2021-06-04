@@ -111,7 +111,7 @@ async function parseInput(wit_response) {
         output.push(position);
         output.push(Number(entities_string));
     }
-    while(output.length < 40) {
+    while(output.length < 41) {
         output.push(0);
     }
     console.log(output);
