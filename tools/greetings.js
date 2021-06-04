@@ -37,7 +37,7 @@ class Greetings {
         'G\'Day mate!!',
     ];
 
-    static SalutationsResponses = [
+    static FarewellResponses = [
         'See ya!',
         'G\' Bye',
         'Bye bye',

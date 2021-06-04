@@ -37,6 +37,7 @@ function saveBotResponse(bot_input) {
 async function getHello() {
     const index = Math.floor(Math.random() * greets.Greetings.SalutationsResponses.length);
     const bot_response = greets.Greetings.SalutationsResponses[index];
+    console.log(bot_response);
     return bot_response;
 }
 
