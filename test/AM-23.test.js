@@ -1,18 +1,18 @@
 const http = require('http-request');
 const reqController = require('../controller/requestController');
+const { Greetings } = require('../tools/greetings');
 
 test('Sends an example message to the wit.ai, then back to the api', () => {
     http.post({
-            url: "http://localhost:3000/api/message",
+            url: "https://amadeus-ar.herokuapp.com/api/message",
             method: "POST",
             reqBody: {
-               "message": "How are you?"
+               "message": "Hello"
            }
            }, function (err, res)  {
             if(err) {
                 console.error(err);
             }
-            return expect(res).resolves.toEqual('Thanks ^^');
-                    
+            return Greetings.SalutationsResponses.includes(expect(res).resolves);
     });
 });
