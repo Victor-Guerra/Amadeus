@@ -14,6 +14,21 @@ const client = new Wit({
   logger: new log.Logger(log.DEBUG),
 });
 
+async function handleMessage(req, res) {
+  const message = req.body.message;
+  var bot_response = '';
+  if (greets.Greetings.Salutations.indexOf(message.toLowerCase()) !== -1) {
+    bot_response = await responseManager.getHello();
+  } else if (greets.Greetings.Farewells.indexOf(message.toLowerCase()) !== -1) {
+    bot_response = await responseManager.getGoodbye();
+  } else {
+    const wit_response = await client.message(message);
+    bot_response = await responseManager.getResponse(wit_response);
+  }
+  console.log(bot_response);
+  res.json(bot_response);
+}
+
 async function signUp(req, res) {
   // Get email and password from request body
   const { name, email, password } = req.body;
@@ -33,7 +48,6 @@ async function signUp(req, res) {
     passwordValidated = true;
   }
 
-  // Validate name
   if (name) {
     nameValidated = true;
   }
@@ -83,7 +97,7 @@ async function signUp(req, res) {
     }
   } else {
     return res.status(409).json({
-      message: 'Invalid credentials, please retry',
+      message: 'Invalid email or password, please retry',
     });
   }
 }
@@ -104,7 +118,7 @@ async function logIn(req, res) {
   if (user.length < 1) {
     console.log('no user with that email was found');
     return res.status(409).json({
-      message: 'Could not log in the user, check your credentials.',
+      message: 'No user with that email was found.',
     });
   }
 
@@ -128,26 +142,9 @@ async function logIn(req, res) {
 
     // If the authentication did not pass
     return res.status(409).json({
-      message: 'Could not log in the user, check your credentials.',
+      message: 'Could not log in the user, wrong password.',
     });
   });
-}
-
-async function test(req, res) {}
-
-async function handleMessage(req, res) {
-  const message = req.body.message;
-  var bot_response = '';
-  if (greets.Greetings.Salutations.indexOf(message.toLowerCase()) !== -1) {
-    bot_response = await responseManager.getHello();
-  } else if (greets.Greetings.Farewells.indexOf(message.toLowerCase()) !== -1) {
-    bot_response = await responseManager.getGoodbye();
-  } else {
-    const wit_response = await client.message(message);
-    bot_response = await responseManager.getResponse(wit_response);
-  }
-  console.log(bot_response);
-  res.json(bot_response);
 }
 
 module.exports = {

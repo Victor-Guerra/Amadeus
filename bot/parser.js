@@ -40,6 +40,9 @@ function mapEntityToInteger(name, role) {
 
         x1 = name_value;
         x2 = role_value;
+        if( x2 == undefined ) {
+            x2 = 0;     
+        }
     }
 
     return [x1,x2,y,z];
@@ -70,12 +73,14 @@ async function parseInput(wit_response) {
         trait_values[index] = value / 5;
 
     }
+
     const output = [intent_value];
     var i = 0;
     for(var i = 0; i < trait_values.length; i++) {
         output.push(Number(trait_values[i]));
     }
 
+    var entities_values = []
     for(var i = 0; i < Object.keys(entities).length; i++) {
         var key = Object.keys(entities)[i];
         const entity = entities[key][0];
@@ -107,6 +112,7 @@ async function parseInput(wit_response) {
             z  = indicators2[3] != 0 ? indicators2[3] : z;
         }
         entities_string = "0." + x1.toString() + x2.toString() + y.toString() + z.toString() + "1";
+         
         output.push(body);
         output.push(position);
         output.push(Number(entities_string));
