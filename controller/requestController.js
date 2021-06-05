@@ -14,132 +14,19 @@ const client = new Wit({
   logger: new log.Logger(log.DEBUG),
 });
 
-async function signUp(req, res) {
-  // Get email and password from request body
-  const { name, email, password } = req.body;
-
-  // Boolean to keep track of password and email validation
-  let emailValidated = false;
-  let passwordValidated = false;
-  let nameValidated = false;
-
-  // Validate email
-  if (email && validateEmail(email)) {
-    emailValidated = true;
-  }
-
-  // Validate password
-  if (password && validatePassword(password)) {
-    passwordValidated = true;
-  }
-
-  // Validate name
-  if (name) {
-    nameValidated = true;
-  }
-
-  if (passwordValidated && emailValidated && nameValidated) {
-    const users = await findUserByEmail(email).catch((err) => {
-      return res.status(500).json({
-        message: 'Could not check if the user already exists.',
-        error: err,
-      });
-    });
-
-    // If user already exists
-    if (users.length >= 1) {
-      return res.status(409).json({
-        message: 'A user registered with that email already exists',
-      });
-      // If user doesn't exist
-    } else {
-      await bcrypt
-        .hash(password, 10)
-        .then((hashedPassword) => {
-          console.log('hash successfully created, creating user');
-          // Create user
-          saveUser(name, email, hashedPassword)
-            .then((result) => {
-              console.log(result);
-              res.status(201).json({
-                message: 'You have created an account.',
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-              res.status(500).json({
-                error: err,
-              });
-            });
-        })
-        .catch((err) => {
-          console.log('error while hashing password');
-          console.log(err);
-          return res.status(500).json({
-            message: 'Error while hashing password.',
-            error: err,
-          });
-        });
-    }
-  } else {
-    return res.status(409).json({
-      message: 'Invalid credentials, please retry',
-    });
-  }
-}
-
-async function logIn(req, res) {
-  // Get email and password from request body
-  const { email, password } = req.body;
-
-  const user = await findUserByEmail(email).catch((err) => {
-    return res.status(500).json({
-      message: 'Could not check if the user already exists.',
-      error: err,
-    });
-  });
-  console.log('user', user);
-
-  // If user does not exist
-  if (user.length < 1) {
-    console.log('no user with that email was found');
-    return res.status(409).json({
-      message: 'Could not log in the user, check your credentials.',
-    });
-  }
-
-  // If user does exist
-  bcrypt.compare(password, user[0].password, (err, result) => {
-    if (err) {
-      console.log('error while authenticating');
-      console.log(err);
-      return res.status(409).json({
-        message: 'Could not authenticate the user.',
-        error: err,
-      });
-    }
-
-    // If the authentication passed
-    if (result) {
-      return res.status(200).json({
-        message: 'Successfully logged in.',
-      });
-    }
-
-    // If the authentication did not pass
-    return res.status(409).json({
-      message: 'Could not log in the user, check your credentials.',
-    });
-  });
-}
-
-async function test(req, res) {}
-
 async function handleMessage(req, res) {
-  const message = req.body.message;
-  const wit_response = await client.message(message);
-  const bot_response = await responseManager.getResponse(wit_response);
-  res.json(bot_response);
+    const message = req.body.message;
+    var bot_response = '';
+    if (greets.Greetings.Salutations.indexOf(message.toLowerCase()) !== -1) {
+        bot_response = await responseManager.getHello();
+    } else if (greets.Greetings.Farewells.indexOf(message.toLowerCase()) !== -1) {
+        bot_response = await responseManager.getGoodbye();
+    } else {
+        const wit_response = await client.message(message);
+        bot_response = await responseManager.getResponse(wit_response);
+    }
+    console.log(bot_response);
+    res.json(bot_response);
 }
 
 async function signUp(req, res) {
@@ -154,6 +41,7 @@ async function signUp(req, res) {
   if (email && validateEmail(email)) {
     emailValidated = true;
   }
+
   // Validate password
   if (password && validatePassword(password)) {
     passwordValidated = true;
@@ -252,20 +140,6 @@ async function logIn(req, res) {
       message: 'Could not log in the user, wrong password.',
     });
   });
-}
-async function handleMessage(req, res) {
-    const message = req.body.message;
-    var bot_response = '';
-    if (greets.Greetings.Salutations.indexOf(message.toLowerCase()) !== -1) {
-        bot_response = await responseManager.getHello();
-    } else if (greets.Greetings.Farewells.indexOf(message.toLowerCase()) !== -1) {
-        bot_response = await responseManager.getGoodbye();
-    } else {
-        const wit_response = await client.message(message);
-        bot_response = await responseManager.getResponse(wit_response);
-    }
-    console.log(bot_response);
-    res.json(bot_response);
 }
 
 module.exports = {

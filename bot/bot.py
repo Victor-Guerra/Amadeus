@@ -31,4 +31,3 @@ class yesNoNet(nn.Module):
         x = F.relu(self.fc4(x))
         
         return F.softmax(x)
-

@@ -73,12 +73,14 @@ async function parseInput(wit_response) {
         trait_values[index] = value / 5;
 
     }
+
     const output = [intent_value];
     var i = 0;
     for(var i = 0; i < trait_values.length; i++) {
         output.push(Number(trait_values[i]));
     }
 
+    var entities_values = []
     for(var i = 0; i < Object.keys(entities).length; i++) {
         var key = Object.keys(entities)[i];
         const entity = entities[key][0];

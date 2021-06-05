@@ -1,7 +1,8 @@
 .env
+./MNIST/
 node_modules
 package-lock.json
 
-# Testing
+# HTTP request testing
 *.rest
 globalConfig.json
